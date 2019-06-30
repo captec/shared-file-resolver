@@ -1,0 +1,58 @@
+{
+  "name": "shared-file-resolver",
+  "version": "0.1.0",
+  "description": "Library to extract file and folder information from sharing links from popular storage services like Dropbox, Box and Google Drive",
+  "main": "src/index.ts",
+  "repository": "git@github.com:andrenanninga/shared-file-resolver.git",
+  "author": "André Nanninga <andre@nannin.ga>",
+  "license": "MIT",
+  "scripts": {
+    "qa": "run-s format lint type",
+    "lint": "eslint ./src/**/*.*",
+    "format": "prettier --write './src/**/*.*'",
+    "type": "tsc"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
+    "@strv/eslint-config-node": "^2.0.0",
+    "@strv/eslint-config-react": "^3.0.0",
+    "@strv/eslint-config-typescript": "^2.0.0",
+    "@typescript-eslint/parser": "^1.11.0",
+    "eslint": "^6.0.1",
+    "eslint-plugin-typescript": "^0.14.0",
+    "husky": "^2.7.0",
+    "lint-staged": "^8.2.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.18.2",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.{json,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "type"
+    }
+  }
+}
