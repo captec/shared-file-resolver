@@ -1,0 +1,29 @@
+{
+  "name": "unshare",
+  "version": 2,
+  "routes": [
+    {
+      "src": "/",
+      "dest": "src/index.ts"
+    },
+    {
+      "src": "/playground",
+      "dest": "src/playground.html"
+    }
+  ],
+  "builds": [
+    {
+      "src": "src/index.ts",
+      "use": "@now/node"
+    },
+    {
+      "src": "src/playground.html",
+      "use": "@now/static"
+    }
+  ],
+  "env": {
+    "DROPBOX_ACCESS_TOKEN": "@unshare-dropbox-access-token",
+    "GOOGLE_DRIVE_API_KEY": "@unshare-google-drive-api-key",
+    "BOX_ACCESS_TOKEN": "@unshare-box-access-token"
+  }
+}

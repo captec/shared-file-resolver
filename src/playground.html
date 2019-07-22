@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Unshare</title>
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Unshare</h1>
+
+      <form method="GET" action="/">
+        <label>
+          Sharing link
+          <input class="u-full-width" type="text" name="sharinglink" />
+        </label>
+
+        <label>
+          <input
+            type="checkbox"
+            name="recursive"
+            placeholder="https://dropbox.com/"
+          />
+          Recursive
+        </label>
+
+        <button class="button-primary" type="submit">Submit</button>
+      </form>
+
+      <label>
+        Request
+      </label>
+      <pre><code class="request">...</code></pre>
+
+      <label>
+        Response
+      </label>
+      <pre><code class="output">...</code></pre>
+    </div>
+
+    <script>
+      const form = document.querySelector('form')
+      const button = document.querySelector('button')
+      const request = document.querySelector('.request')
+      const output = document.querySelector('.output')
+
+      function enableButton(enable = true) {
+        if (enable) {
+          button.disabled = false
+          button.className = 'button-primary'
+          button.innerText = 'Submit'
+        } else {
+          button.disabled = true
+          button.className = 'button'
+          button.innerText = 'Loading...'
+        }
+      }
+
+      form.onsubmit = e => {
+        e.preventDefault()
+        enableButton(false)
+
+        const sharinglink = document.querySelector('[name=sharinglink]').value
+        const recursive = document.querySelector('[name=recursive]').checked
+
+        const url = encodeURI(
+          `/?recursive=${recursive ? 'on' : ''}&sharinglink=${sharinglink}`
+        )
+
+        request.innerHTML = url
+        output.innerHTML = '...'
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            enableButton()
+
+            output.innerText = JSON.stringify(data, null, 2)
+          })
+          .catch(err => {
+            enableButton()
+
+            output.innerText = err.message
+          })
+      }
+    </script>
+  </body>
+</html>
