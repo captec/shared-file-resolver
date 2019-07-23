@@ -21,12 +21,12 @@
         </label>
 
         <label>
-          <input
-            type="checkbox"
-            name="recursive"
-            placeholder="https://dropbox.com/"
-          />
+          <input type="checkbox" name="recursive" />
           Recursive
+        </label>
+        <label>
+          <input type="checkbox" name="hidefolders" />
+          Hide folders
         </label>
 
         <button class="button-primary" type="submit">Submit</button>
@@ -67,9 +67,12 @@
 
         const sharinglink = document.querySelector('[name=sharinglink]').value
         const recursive = document.querySelector('[name=recursive]').checked
+        const hidefolders = document.querySelector('[name=hidefolders]').checked
 
         const url = encodeURI(
-          `/?recursive=${recursive ? 'on' : ''}&sharinglink=${sharinglink}`
+          `/?sharinglink=${sharinglink}&recursive=${recursive ? 'on' : ''}&hidefolders=${
+            hidefolders ? 'on' : ''
+          }`
         )
 
         request.innerHTML = url

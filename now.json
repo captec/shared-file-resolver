@@ -4,7 +4,10 @@
   "routes": [
     {
       "src": "/",
-      "dest": "src/index.ts"
+      "dest": "src/index.ts",
+      "headers": {
+        "Access-Control-Allow-Origin": "*"
+      }
     },
     {
       "src": "/playground",

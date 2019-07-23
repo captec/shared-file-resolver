@@ -7,10 +7,14 @@ import * as box from './box'
 async function lambda(req: NowRequest, res: NowResponse): Promise<void> {
   const sharinglink: string = req.query.sharinglink as string
   const recursive: boolean = Boolean(req.query.recursive)
+  const hideFolders: boolean = Boolean(req.query.hidefolders)
 
   if (!sharinglink) {
     res.statusCode = 401
-    res.send({ error: 'missing_sharing_link_parameter', service: null })
+    res.send({
+      error: 'missing_sharing_link_parameter',
+      service: null,
+    })
     return
   }
 
@@ -22,15 +26,28 @@ async function lambda(req: NowRequest, res: NowResponse): Promise<void> {
   } else if (isBoxLink(sharinglink)) {
     promise = box.getFiles(sharinglink, recursive)
   } else {
-    res.send({ error: 'unrecognized_sharing_link', service: null, statusCode: 401 })
+    res.statusCode = 401
+    res.send({
+      error: 'unrecognized_sharing_link',
+      service: null,
+    })
     return
   }
 
   try {
-    const files = await promise
-    res.send(files)
+    const items = await promise
+
+    if (hideFolders) {
+      res.send(items.filter(item => item.type !== 'folder'))
+    } else {
+      res.send(items)
+    }
   } catch (error) {
-    res.send({ error: error.message, service: error.service, statusCode: 401 })
+    res.statusCode = 401
+    res.send({
+      error: error.message,
+      service: error.service,
+    })
   }
 }
 
