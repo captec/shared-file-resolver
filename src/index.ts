@@ -7,7 +7,6 @@ import * as box from './box'
 async function lambda(req: NowRequest, res: NowResponse): Promise<void> {
   const sharinglink: string = req.query.sharinglink as string
   const recursive: boolean = Boolean(req.query.recursive)
-  const hideFolders: boolean = Boolean(req.query.hidefolders)
 
   if (!sharinglink) {
     res.statusCode = 401
@@ -18,7 +17,7 @@ async function lambda(req: NowRequest, res: NowResponse): Promise<void> {
     return
   }
 
-  let promise: Promise<Unshare.File[]> | null = null
+  let promise: Promise<Unshare.Entry[]> | null = null
   if (isDropboxLink(sharinglink)) {
     promise = dropbox.getFiles(sharinglink, recursive)
   } else if (isGoogleDriveLink(sharinglink)) {
@@ -36,12 +35,7 @@ async function lambda(req: NowRequest, res: NowResponse): Promise<void> {
 
   try {
     const items = await promise
-
-    if (hideFolders) {
-      res.send(items.filter(item => item.type !== 'folder'))
-    } else {
-      res.send(items)
-    }
+    res.send(items)
   } catch (error) {
     res.statusCode = 401
     res.send({

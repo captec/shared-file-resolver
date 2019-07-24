@@ -1,12 +1,22 @@
 declare namespace Unshare {
   type Service = 'dropbox' | 'google_drive' | 'box'
 
+  type Entry = File | Folder
+
   type File = {
     name: string
-    type: 'file' | 'folder'
+    type: 'file'
     path: string
     url?: string
     mimeType?: string
+  }
+
+  type Folder = {
+    name: string
+    type: 'folder'
+    path: string
+    url?: string
+    entries: Entry[]
   }
 }
 

@@ -24,7 +24,6 @@ The Unshare service consists of a single endpoint to resolve "shared file links"
 | ------------- | -------------------------------------------------------------------- | --------- |
 | `sharinglink` | Sharing link to the file or folder to get information from           | `string`  |
 | `recursive`   | Recursively fetch files and folders if the original link is a folder | `boolean` |
-| `hidefolder`  | Hide folders from the output array, show only files                  | `boolean` |
 
 ## Environment variables
 

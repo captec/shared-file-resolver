@@ -20,14 +20,12 @@
           <input class="u-full-width" type="text" name="sharinglink" />
         </label>
 
-        <label>
-          <input type="checkbox" name="recursive" />
-          Recursive
-        </label>
-        <label>
-          <input type="checkbox" name="hidefolders" />
-          Hide folders
-        </label>
+        <div class="row">
+          <label class="three columns">
+            <input type="checkbox" name="recursive" />
+            Recursive
+          </label>
+        </div>
 
         <button class="button-primary" type="submit">Submit</button>
       </form>
@@ -67,12 +65,12 @@
 
         const sharinglink = document.querySelector('[name=sharinglink]').value
         const recursive = document.querySelector('[name=recursive]').checked
-        const hidefolders = document.querySelector('[name=hidefolders]').checked
 
         const url = encodeURI(
-          `/?sharinglink=${sharinglink}&recursive=${recursive ? 'on' : ''}&hidefolders=${
-            hidefolders ? 'on' : ''
-          }`
+          `/?
+          sharinglink=${sharinglink}&
+          recursive=${recursive ? 'on' : ''}
+        `.replace(/ |\n/gi, '')
         )
 
         request.innerHTML = url

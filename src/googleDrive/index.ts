@@ -1,6 +1,6 @@
 import { getSharedLinkMetadata, getFilesInFolder } from './api'
 
-async function getFiles(url: string, recursive?: boolean): Promise<Unshare.File[]> {
+async function getFiles(url: string, recursive?: boolean): Promise<Unshare.Entry[]> {
   const metadata = await getSharedLinkMetadata(url)
 
   if (isFolder(metadata)) {
@@ -21,24 +21,35 @@ async function listDirectory(
   id: string,
   recursive: boolean = false,
   path: string = ''
-): Promise<Unshare.File[]> {
+): Promise<Unshare.Entry[]> {
   const folder = await getFilesInFolder(id)
-  const files: Unshare.File[] = []
+  const files: Unshare.Entry[] = []
 
   for (let i = 0; i < folder.files.length; i++) {
     const entry = folder.files[i]
 
-    files.push({
-      name: entry.name,
-      type: isFolder(entry) ? 'folder' : 'file',
-      mimeType: entry.mimeType,
-      url: entry.webViewLink,
-      path: `.${path}`,
-    })
+    if (isFolder(entry)) {
+      let entries: Unshare.Entry[] = []
 
-    if (recursive && isFolder(entry)) {
-      const children = await listDirectory(entry.id, recursive, `${path}/${entry.name}`)
-      children.forEach(child => files.push(child))
+      if (recursive) {
+        entries = await listDirectory(entry.id, recursive, `${path}/${entry.name}`)
+      }
+
+      files.push({
+        name: entry.name,
+        type: 'folder',
+        url: entry.webViewLink,
+        path: `.${path}`,
+        entries,
+      })
+    } else {
+      files.push({
+        name: entry.name,
+        type: 'file',
+        mimeType: entry.mimeType,
+        url: entry.webViewLink,
+        path: `.${path}`,
+      })
     }
   }
 
