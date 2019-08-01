@@ -55,8 +55,8 @@ function extractId(url: string): string | null {
   return matches[1]
 }
 
-function parseError(error: Error | GoogleDrive.Error): void {
-  if (error instanceof Error) {
+function parseError(error: GoogleDrive.Error): void {
+  if (!error.errors || error.errors.length === 0) {
     throw UnshareError.internalError('google_drive')
   }
 
