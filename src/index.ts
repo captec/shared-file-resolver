@@ -37,6 +37,7 @@ async function lambda(req: NowRequest, res: NowResponse): Promise<void> {
     const items = await promise
     res.send(items)
   } catch (error) {
+    console.error(error)
     res.statusCode = 401
     res.send({
       error: error.message,

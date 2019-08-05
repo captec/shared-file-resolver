@@ -1,6 +1,8 @@
 import mime from 'mime-types'
 import { getSharedLinkMetadata, getFilesInFolder } from './api'
 
+const MAX_RECURSION_DEPTH = parseInt(process.env.MAX_RECURSION_DEPTH || '1', 10) || 1
+
 async function getFiles(url: string, recursive?: boolean): Promise<Unshare.Entry[]> {
   const metadata = await getSharedLinkMetadata(url)
 
@@ -21,7 +23,8 @@ async function listDirectory(
   id: string,
   url: string,
   recursive: boolean = false,
-  path: string = ''
+  path: string = '',
+  depth: number = 0
 ): Promise<Unshare.Entry[]> {
   const folder = await getFilesInFolder(id, url)
   const files: Unshare.Entry[] = []
@@ -31,8 +34,8 @@ async function listDirectory(
 
     if (isFolder(entry)) {
       let entries: Unshare.Entry[] = []
-      if (recursive) {
-        entries = await listDirectory(entry.id, url, recursive, `${path}/${entry.name}`)
+      if (recursive && depth < MAX_RECURSION_DEPTH) {
+        entries = await listDirectory(entry.id, url, recursive, `${path}/${entry.name}`, depth + 1)
       }
 
       files.push({
