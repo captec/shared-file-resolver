@@ -7,6 +7,8 @@ const API_KEY = process.env.GOOGLE_DRIVE_API_KEY
 async function getSharedLinkMetadata(url: string): Promise<GoogleDrive.Metadata> {
   const id = extractId(url)
 
+  console.log(id)
+
   if (!id) {
     throw UnshareError.malformedLink('google_drive')
   }
@@ -46,7 +48,7 @@ async function getFilesInFolder(id: string): Promise<GoogleDrive.FilesInFolder> 
 }
 
 function extractId(url: string): string | null {
-  const matches = url.match(/(?:folders\/|id=)([a-zA-Z0-9]*)/u)
+  const matches = url.match(/(?:folders\/|id=)([a-zA-Z0-9-]*)/u)
 
   if (!matches || matches.length !== 2) {
     return null
