@@ -25,7 +25,7 @@
     }
   ],
   "env": {
-    "MAX_RECURSION_DEPTH": 2,
+    "MAX_RECURSION_DEPTH": "2",
     "DROPBOX_ACCESS_TOKEN": "@unshare-dropbox-access-token",
     "GOOGLE_DRIVE_API_KEY": "@unshare-google-drive-api-key",
     "BOX_ACCESS_TOKEN": "@unshare-box-access-token"
